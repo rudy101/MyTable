@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace MyTable
@@ -10,14 +11,9 @@ namespace MyTable
     class MyTable
     {
         public event ChangedEventHandler Changed;
-        /*
-        protected virtual void OnChanged(int sizeOfTale)
-        {
-            Changed?.Invoke(sizeOfTale);
-        }
-        */
         int DEFAULT_VALUE;
         int currentSize;
+        
         public int CurrentSize
         {
             get
@@ -39,6 +35,22 @@ namespace MyTable
         {
             DEFAULT_VALUE = -1;
             currentSize = 0;
+            Monitor.Enter(tab);
+        }
+
+        //dokończyć
+        public void LockedAdd(int value)
+        {
+            while (!Monitor.TryEnter(tab))
+            {
+                Add(value);
+            }
+        }
+
+        //dokończyć
+        public void UnlockedAdd(int value)
+        {
+
         }
 
         public void Add (int value)
