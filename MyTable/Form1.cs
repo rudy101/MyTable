@@ -15,6 +15,9 @@ namespace MyTable
     {
         MyTable pMyTable;
         Checker pChecker;
+
+        bool setIndex;
+        bool setValue;
         public Form1()
         {
             InitializeComponent();
@@ -29,10 +32,18 @@ namespace MyTable
         {
             System.Console.WriteLine("Program started.");
             pMyTable = new MyTable();
+            pMyTable.Changed += new ChangedEventHandler(sizeChanged);
             pChecker = new Checker();
             buttonAdd.Enabled = false;
             buttonGet.Enabled = false;
             buttonSet.Enabled = false;
+            setIndex = false;
+            setValue = false;
+        }
+
+        private void sizeChanged(int sizeOfTable)
+        {
+            System.Console.WriteLine("Size = " + sizeOfTable);
         }
 
         private void textBoxAdd_TextChanged(object sender, EventArgs e)
@@ -87,24 +98,26 @@ namespace MyTable
         {
             if (pChecker.check(textBoxSetIndex.Text))
             {
-                buttonSet.Enabled = true;
+                setIndex = true;
             }
             else
             {
-                buttonSet.Enabled = false;
+                setIndex = false;
             }
+            buttonSet.Enabled = setIndex && setValue;
         }
 
         private void textBoxSetValue_TextChanged(object sender, EventArgs e)
         {
             if (pChecker.isThereInt(textBoxSetValue.Text))
             {
-                buttonSet.Enabled = true;
+                setValue = true;
             }
             else
             {
-                buttonSet.Enabled = false;
+                setValue = false;
             }
+            buttonSet.Enabled = setIndex && setValue;
         }
 
         private void buttonSet_Click(object sender, EventArgs e)

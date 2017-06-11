@@ -6,8 +6,16 @@ using System.Threading.Tasks;
 
 namespace MyTable
 {
+    public delegate void ChangedEventHandler(int sizeOfTale);
     class MyTable
     {
+        public event ChangedEventHandler Changed;
+        /*
+        protected virtual void OnChanged(int sizeOfTale)
+        {
+            Changed?.Invoke(sizeOfTale);
+        }
+        */
         int DEFAULT_VALUE;
         int currentSize;
         public int CurrentSize
@@ -31,7 +39,6 @@ namespace MyTable
         {
             DEFAULT_VALUE = -1;
             currentSize = 0;
-            
         }
 
         public void Add (int value)
@@ -64,6 +71,7 @@ namespace MyTable
 
                 indexOfLast++;
             }
+            Changed?.Invoke(indexOfLast + 1);
         }
 
         public int Get (int index)
@@ -98,6 +106,8 @@ namespace MyTable
                 tab = temp;
                 currentSize = newCurrentSize;
                 indexOfLast = index;
+
+                Changed?.Invoke(indexOfLast + 1);
             }
             else
             {
